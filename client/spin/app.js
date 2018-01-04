@@ -1,28 +1,30 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, 'spin', { preload: preload, create: create, update: update, render: render });
+var game = new Phaser.Game(800, 900, Phaser.AUTO, 'spin', { preload: preload, create: create, update: update, render: render });
 
 function preload() {
   game.load.image('spinner', 'assets/Yellow_Fidget_Spinner.png');
   game.load.image('startButton', 'assets/play-button.png');
+  game.load.spritesheet('slambar', 'assets/spritesheet.png', 260, 116)
 }
 
 var spinner;
 var point;
 var startButton;
 var spinning;
+var slambar;
 
 function create() {
   spinning = false
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
   spinner = game.add.sprite(300, 270, 'spinner');
-  startButton = game.add.sprite(650, 50, 'startButton')
+  slambar = game.add.sprite(180, 550,'slambar')
   button = game.add.button(650, 50, 'startButton', toggleSpinner, this);
 
   game.physics.enable(spinner, Phaser.Physics.ARCADE);
-  console.log(spinner)
   spinner.anchor.set(0.579952267, 0.5)
   cursors = game.input.keyboard.createCursorKeys();
   tagButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
 }
 
 function update() {
@@ -32,6 +34,13 @@ function update() {
     spinner.body.angularVelocity -= 15;
   } else if (cursors.right.isDown || cursors.down.isDown) {
     spinner.body.angularVelocity += 15;
+  }
+
+  if(tagButton.isDown) {
+    slambar.frame = 1
+    spinner.body.angularVelocity = 0
+  } else {
+    slambar.frame = 0
   }
 
 }
