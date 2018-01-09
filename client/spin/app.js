@@ -11,6 +11,9 @@ var point;
 var startButton;
 var spinning;
 var slambar;
+var cursors;
+var pausePoints = [ 0.5654866776461306, 2.6203209836607546, -1.5466526054757181 ];
+var oldVelocity;
 
 function create() {
   spinning = false
@@ -25,20 +28,40 @@ function create() {
   cursors = game.input.keyboard.createCursorKeys();
   tagButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
+  tagButton.onDown.add(() => {
+    console.log('press button')
+    if(!spinning) {
+      spinner.body.angularVelocity = oldVelocity || 15
+      spinning = true
+    } else {
+      oldVelocity = spinner.body.angularVelocity
+      spinner.body.angularVelocity = 0
+      spinning = false
+      return
+    }
+  })
+  // console.log(spinner)
+  // cursors.l
+  console.log(tagButton)
 }
 
 function update() {
 
-  if(!spinning) return
   if (cursors.left.isDown || cursors.up.isDown) {
-    spinner.body.angularVelocity -= 15;
+    spinner.body.angularVelocity -= 1;
   } else if (cursors.right.isDown || cursors.down.isDown) {
-    spinner.body.angularVelocity += 15;
+    spinner.body.angularVelocity += 1;
   }
-
+  var match = pausePoints.find(n => {
+    if(spinner.rotation <= n + 0.05 && spinner.rotation >= n - 0.05) {
+      return n
+    }
+  })
   if(tagButton.isDown) {
     slambar.frame = 1
-    spinner.body.angularVelocity = 0
+  } else if (match) {
+    console.log('match')
+    slambar.frame = 1
   } else {
     slambar.frame = 0
   }
@@ -51,7 +74,7 @@ function render() {
 
 function toggleSpinner () {
   if(!spinning) {
-    spinner.body.angularVelocity = 50
+    spinner.body.angularVelocity = 12
   } else {
     spinner.body.angularVelocity = 0
   }
