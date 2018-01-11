@@ -44,7 +44,7 @@ function score(e) {
     direction.text = 'Press this key: \n ' + '    ' + temp + '   ' + frameMap[temp]
 
     // direction2.frame = frameMap.indexOf(direction.text)
-    spinner.body.angularVelocity += 25;
+    spinner.body.angularVelocity += 45;
   } else {
     // Wrong input, decrease speed
     spinner.body.angularVelocity -= 15;
@@ -73,9 +73,9 @@ function create() {
   tagButton.onDown.add(() => {
     console.log('press button')
     if(!spinning) {
-      spinner.body.angularVelocity = oldVelocity || 15
-      spinning = true
-      scoreText.text = 'Current Speed: ' + spinner.body.angularVelocity;
+      // spinner.body.angularVelocity = oldVelocity || 15
+      // spinning = true
+      // scoreText.text = 'Current Speed: ' + spinner.body.angularVelocity;
     } else {
       oldVelocity = spinner.body.angularVelocity
       spinner.body.angularVelocity = 0
