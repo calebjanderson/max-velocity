@@ -71,7 +71,6 @@ function create() {
   tagButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
   tagButton.onDown.add(() => {
-    console.log('press button')
     if(!spinning) {
       // spinner.body.angularVelocity = oldVelocity || 15
       // spinning = true
@@ -84,15 +83,12 @@ function create() {
       return
     }
   })
-  console.log(cursors)
   cursors.up.onDown.add(score)
   cursors.down.onDown.add(score)
   cursors.left.onDown.add(score)
   cursors.right.onDown.add(score)
 
-  // console.log(spinner)
   // cursors.l
-  console.log(tagButton)
 }
 
 function startTimer() {
@@ -101,11 +97,9 @@ function startTimer() {
 }
 
 function victory() {
-  console.log('victory')
   spinning = false
   startTime = null
   direction.text = 'You win!'
-  console.log(startTime)
 }
 
 function update() {
