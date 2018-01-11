@@ -1,11 +1,16 @@
 var game = new Phaser.Game(800, 900, Phaser.AUTO, 'spin', { preload: preload, create: create, update: update, render: render });
 
+console.log(moment)
+
 function preload() {
   game.load.image('spinner', 'assets/Yellow_Fidget_Spinner.png');
   game.load.image('startButton', 'assets/play-button.png');
   game.load.spritesheet('slambar', 'assets/spritesheet.png', 260, 116)
 }
 
+var timePassed = 0;
+var startTime;
+var time;
 var spinner;
 var point;
 var startButton;
@@ -16,8 +21,30 @@ var pausePoints = [ 0.5654866776461306, 2.6203209836607546, -1.5466526054757181 
 var oldVelocity;
 var strMap = { 'left': 37, 'up': 38, 'right': 39, 'down': 40 }
 var directions = { 38:  ['down', 'left', 'right' ], 40: ['up', 'left', 'right'], 37: ['up', 'down', 'right'], 39: ['up', 'down', 'left'] }
-var target = 38
+var target = 38;
+
+function score(e) {
+  if(!spinning) {
+    return
+  }
+
+  // If the direction pressed matches the one displayed
+  if(e.keyCode === target) {
+
+    // Decide next direction and increase speed
+    var randomIndex = Math.round(Math.random() * 1000 % 2)
+    direction.text = directions[target][randomIndex]
+    target = strMap[direction.text]
+    spinner.body.angularVelocity += 25;
+  } else {
+    // Wrong input, decrease speed
+    spinner.body.angularVelocity -= 15;
+  }
+
+}
+
 function create() {
+  time = moment();
   spinning = false
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -25,6 +52,7 @@ function create() {
   slambar = game.add.sprite(180, 550,'slambar')
   button = game.add.button(650, 50, 'startButton', toggleSpinner, this);
   scoreText = game.add.text(545, 176, 'Current Speed: 0', { fontSize: '24px', fill: 'white' });
+  Timer = game.add.text(25, 476, 'Timer: \n 00:00', { fontSize: '24px', fill: 'white' });
   direction = game.add.text(600, 476, 'up', { fontSize: '24px', fill: 'white' });
 
   game.physics.enable(spinner, Phaser.Physics.ARCADE);
@@ -47,74 +75,34 @@ function create() {
     }
   })
   console.log(cursors)
-  cursors.up.onDown.add((e) => {
-    if(!spinning) {
-      return
-    }
-    console.log('is down: ', e.keyCode, target)
-    if(e.keyCode === target) {
-      var randomIndex = Math.round(Math.random() * 1000 % 2)
-      direction.text = directions[target][randomIndex]
-      target = strMap[direction.text]
-      spinner.body.angularVelocity += 25;
-    } else {
-      spinner.body.angularVelocity -= 15;
-    }
+  cursors.up.onDown.add(score)
+  cursors.down.onDown.add(score)
+  cursors.left.onDown.add(score)
+  cursors.right.onDown.add(score)
 
-  })
-  cursors.down.onDown.add((e) => {
-    if(!spinning) {
-      return
-    }
-    console.log('is down: ', e.keyCode, target)
-    if(e.keyCode === target) {
-      var randomIndex = Math.round(Math.random() * 1000 % 2)
-      direction.text = directions[target][randomIndex]
-      target = strMap[direction.text]
-      spinner.body.angularVelocity += 25;
-    } else {
-      spinner.body.angularVelocity -= 15;
-    }
-
-  })
-  cursors.left.onDown.add((e) => {
-    if(!spinning) {
-      return
-    }
-    console.log('is down: ', e.keyCode, target)
-    if(e.keyCode === target) {
-      var randomIndex = Math.round(Math.random() * 1000 % 2)
-      direction.text = directions[target][randomIndex]
-      target = strMap[direction.text]
-      spinner.body.angularVelocity += 25;
-    } else {
-      spinner.body.angularVelocity -= 15;
-    }
-
-
-  })
-  cursors.right.onDown.add((e) => {
-    if(!spinning) {
-      return
-    }
-    console.log('is down: ', e.keyCode, target)
-    if(e.keyCode === target) {
-      var randomIndex = Math.round(Math.random() * 1000 % 2)
-      direction.text = directions[target][randomIndex]
-      target = strMap[direction.text]
-      spinner.body.angularVelocity += 25;
-    } else {
-      spinner.body.angularVelocity -= 15;
-    }
-
-
-  })
   // console.log(spinner)
   // cursors.l
   console.log(tagButton)
 }
 
+function startTimer() {
+  startTime = moment();
+}
+
+function victory() {
+  console.log('victory')
+  spinning = false
+  startTime = null
+
+}
+
 function update() {
+  time = moment()
+  if(startTime) {
+    timePassed += time.diff(startTime, 'ss')
+    Timer.text = 'Timer: \n ' + moment(timePassed).format('mm:ss')
+    startTime = time
+  }
   if(!spinning) {
     return
   }
@@ -133,12 +121,14 @@ function update() {
   if(tagButton.isDown) {
     slambar.frame = 1
   } else if (match) {
-    console.log('match')
     slambar.frame = 1
   } else {
     slambar.frame = 0
   }
 
+  if(spinner.body.angularVelocity == 1000) {
+    victory()
+  }
 }
 
 function render() {
@@ -147,10 +137,11 @@ function render() {
 
 function toggleSpinner () {
   if(!spinning) {
-    spinner.body.angularVelocity = 12
+    spinner.body.angularVelocity = 950
   } else {
     spinner.body.angularVelocity = 0
   }
 
   spinning = !spinning
+  startTimer()
 }
