@@ -3,29 +3,68 @@
 <head>
   <title>Keep spinning</title>
   <style>
-    html {
+    @font-face {
+      font-family: 'PacFont';
+      src: url('PacFont.ttf');
+    }
+    html, body {
       background-color: black;
+      margin: 0px;
+    }
+    #title {
+      font-family: 'Monoton', Fallback, sans-serif;
+      font-size: 64px;
+      font-style: normal;
+      font-variant: normal;
+      font-weight: 500;
+      line-height: 15.4px;
+      display: inline-flex;
+      vertical-align: middle;
+    }
+    .preTitle{
+      font-family: 'Press Start 2P', Fallback, sans-serif;
+      font-size: 24px;
+      display: inline-flex;
+      vertical-align: middle;
     }
     .header {
       margin: 0px;
       padding: 40px;
+      padding-bottom: 5px;
+      padding-top: 5px;
       text-align: center;
-      background-color: black;
+      background-color: #333;
       color: white;
     }
     #spin {
       margin: 0px;
-      padding-left: 25%;
+      padding-left: 15%;
       background-color: black;
+      display: flex;
+    }
+    #footer {
+      font-family: 'Press Start 2P', Fallback, sans-serif;
+      font-size: 16px;
+      margin: 0px;
+      padding: 40px;
+      padding-bottom: 5px;
+      padding-top: 5px;
+      text-align: center;
+      background-color: #333;
+      color: white;
     }
   </style>
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P|Monoton&effect=fire-animation" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="/favicon.ico?v=1.0">
 </head>
 <body>
   <div class="header">
-    <h3>Spin in it to win it</h3>
+    <p id="title" class="font-effect-fire-animation">MAX VELOCITY</p>
   </div>
   <div id="spin">
+  </div>
+  <div id="footer">
+    <p>Source code <a href="https://www.github.com/calebjanderson">here</a></p>
   </div>
   <script src="//cdn.jsdelivr.net/phaser/2.6.2/phaser.js"></script>
   <script src="scripts/moment/min/moment.min.js"></script>
