@@ -101,7 +101,6 @@ setTimeout(() => {
     cursors.left.onDown.add(score)
     cursors.right.onDown.add(score)
 
-    // cursors.l
   }
 
   function startTimer() {
@@ -114,7 +113,6 @@ setTimeout(() => {
     startTime = null
     startButton.visible = true
 
-    console.log(timePassed, bestTimeValue, timePassed > bestTimeValue, timePassed > moment(bestTimeValue))
     if(timePassed < bestTimeValue) {
       direction.text = 'You win! New record!'
       bestTimeValue = timePassed
@@ -143,11 +141,11 @@ setTimeout(() => {
     // } else if (cursors.right.isDown || cursors.down.isDown) {
     //   spinner.body.angularVelocity += 1;
     // }
-    var match = pausePoints.find(n => {
-      if(spinner.rotation <= n + 0.05 && spinner.rotation >= n - 0.05) {
-        return n
-      }
-    })
+    // var match = pausePoints.find(n => {
+    //   if(spinner.rotation <= n + 0.05 && spinner.rotation >= n - 0.05) {
+    //     return n
+    //   }
+    // })
     // if(tagButton.isDown) {
     //   slambar.frame = 1
     // } else if (match) {
@@ -174,7 +172,7 @@ setTimeout(() => {
 
     spinning = !spinning
     startButton.visible = false
-    
+
     Timer.visible = true
     startTimer()
     direction.text = 'Press this key: \n ' + '  ' + (temp || 'up') + ' ' + (frameMap[temp] || '↑')
